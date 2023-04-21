@@ -23,6 +23,23 @@ class profile{
 
 }
 
+class adminProfile{
+
+  String? id = "";
+  String email = "";
+  String gender = "";
+  String dob = "";
+
+  adminProfile(
+      {required this.id, required this.email, required this.gender, required this.dob});
+
+  @override
+  String toString() {
+    return "$email\n$gender\n$dob\n$id";
+  }
+
+}
+
 class doctor{
 
   String name = "";

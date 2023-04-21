@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:telemedicine_admin/api.dart';
+import 'package:telemedicine_admin/dashboardScreen/dashboardScreen.dart';
 
 import '../colors.dart';
 import '../components.dart';
@@ -56,12 +57,12 @@ class _bodyState extends State<body> {
                 SizedBox(
                   height: 15,
                 ),
-                components().text("   Phone", FontWeight.w500, Colors.black, 18),
-                components().textField("Enter Phone", TextInputType.phone, _phoneController),
-                emailInvalid ? components().text(" Enter valid Phone", FontWeight.normal, Colors.red, 15) : Container(),
-                SizedBox(
-                  height: 15,
-                ),
+                // components().text("   Phone", FontWeight.w500, Colors.black, 18),
+                // components().textField("Enter Phone", TextInputType.phone, _phoneController),
+                // emailInvalid ? components().text(" Enter valid Phone", FontWeight.normal, Colors.red, 15) : Container(),
+                // SizedBox(
+                //   height: 15,
+                // ),
                 components().text("   Gender", FontWeight.w500, Colors.black, 18),
                 Container(
                   height:
@@ -184,13 +185,20 @@ class _bodyState extends State<body> {
                         setState(() {
                           isLoading = true;
                         });
+                        var res = await api().createProfile(adminProfile(id: widget.id, email: _emailController.text, gender: gender.toString(), dob: dateTime.toString().substring(0,10)));
 
+                        if(res == "Success"){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => dashboardScreen(id: widget.id),));
+                        }
+                        else{
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: components().text("Profile not created", FontWeight.w500, Colors.white, 18)));
+                        }
                         setState(() {
                           isLoading = false;
                         });
                         // Navigator.of(context).push(MaterialPageRoute(builder: (context) => scheduleslots(id:  widget.id, hospitalId: hostiptaId),));
                       },
-                      child: isLoading ? CircularProgressIndicator(color: Colors.white,) : components().text("Next",
+                      child: isLoading ? CircularProgressIndicator(color: Colors.white,) : components().text("Submit",
                           FontWeight.bold, Colors.white, 20)),
                 ),
               ],
@@ -208,19 +216,19 @@ class _bodyState extends State<body> {
         emailInvalid = true;
       });
     }
-    if(gender != "female"){
+    if(gender == "female"){
       setState(() {
-        _genderInvalid = true;
+        _genderInvalid = false;
       });
     }
-    if(gender != "male"){
+    if(gender == "male"){
       setState(() {
-        _genderInvalid = true;
+        _genderInvalid = false;
       });
     }
-    if(gender != "other"){
+    if(gender == "other"){
       setState(() {
-        _genderInvalid = true;
+        _genderInvalid = false;
       });
     }
 

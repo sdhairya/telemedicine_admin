@@ -8,12 +8,16 @@ import 'package:telemedicine_admin/dataClass/dataClass.dart';
 import 'dataClass/dataClass.dart';
 
 class api {
-  String uri = 'http://192.168.1.9:5024/';
+  String uri = 'http://192.168.1.58:5024/';
 
   Future<List<String>> login(String phone, String password) async {
     String url = uri + "api/users/login";
     var res = await http.post(Uri.parse(url),
-        body: json.encode({"phone": phone, "password": password}),
+        body: json.encode({
+          "phone": phone,
+          "password": password,
+          "role": "Admin"
+        }),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json"
@@ -39,30 +43,21 @@ class api {
     // }
   }
 
-  Future<List<profile>> profiledetails(String id) async {
-    String url = uri + "api/doctors/byid?id=" + id;
+  Future<List<String>> profiledetails(String id) async {
+    String url = "${uri}api/admin";
     var res = await http.get(Uri.parse(url));
     var responseData = json.decode(res.body);
 
     print(responseData[0]);
-    List<profile> profileData = [];
+    List<String> data = [];
 
     for(var i in responseData){
-      profileData.add(profile(
-
-          id: id,
-          name: i["user"]["name"].toString(),
-          email: i["user"]["email"].toString(),
-          gender: i["user"]["gender"].toString(),
-          password: i["user"]["password"].toString(),
-          dob: " ",
-          image: i["user"]["image"].toString(),
-          phone: " ",
-          ));
+      data.add(i["totalpatients"].toString());
+      data.add(i["totaldoctors"].toString());
     }
     
-    print(profileData);
-    return profileData;
+    print(data);
+    return data;
   }
 
   // Future<String> updateProfile(profile data, String id, ) async {
@@ -116,59 +111,29 @@ class api {
   //   return "Success";
   // }
   //
-  // Future<String> createProfile(profile data, doctor doctorData) async {
-  //   print(data);
-  //   print(doctorData);
-  //   var url = "api/doctors/basic?id=" + data.id;
-  //   var request = http.MultipartRequest('PUT', Uri.parse(uri + url));
-  //
-  //   request.fields.addAll({
-  //     "email": data.email,
-  //     "gender": data.gender,
-  //     "dob": data.dob,
-  //   });
-  //   if (data.image != null) {
-  //     request.files
-  //         .add(await http.MultipartFile.fromPath('image', data.image!));
-  //   }
-  //
-  //   var response = await request.send();
-  //
-  //   print(response.statusCode);
-  //   // print(response.body);
-  //
-  //   var urlDoc = "api/doctors?phone=" + data.phone;
-  //   var reqDoc = http.MultipartRequest("POST", Uri.parse(uri + urlDoc));
-  //
-  //   reqDoc.fields.addAll({
-  //     "speciality": doctorData.speciality,
-  //     "facility_id": doctorData.hospital.toString(),
-  //     "description": doctorData.description,
-  //     "experience": doctorData.experience.toString(),
-  //     "tags": doctorData.tags,
-  //     "fees": doctorData.fees.toString()
-  //   });
-  //
-  //   for (var i = 0; i < doctorData.degree.length; i++) {
-  //     reqDoc.fields.addAll({
-  //       "degree": doctorData.degree[i].name,
-  //     });
-  //     reqDoc.files.add(await http.MultipartFile.fromPath(
-  //         'document', doctorData.degree[i].docPath));
-  //   }
-  //   for (var i = 0; i < doctorData.otherAchievements.length; i++) {
-  //     reqDoc.fields.addAll({
-  //       "otherachivement": doctorData.otherAchievements[i].name,
-  //     });
-  //     reqDoc.files.add(await http.MultipartFile.fromPath(
-  //         'otherachivementdoc', doctorData.otherAchievements[i].docPath));
-  //   }
-  //
-  //   var resDoc = await reqDoc.send();
-  //   print(resDoc.statusCode);
-  //
-  //   return "Success";
-  // }
+  Future<String> createProfile(adminProfile data) async {
+    print(data);
+    var url = "api/admin?id=" + data.id.toString();
+    var request = await http.put(Uri.parse(uri + url),
+        body:json.encode({
+          "email": data.email,
+          "gender": data.gender,
+          "dob": data.dob,
+        }),
+        headers: {
+          "Accept": "application/json",
+          "content-type":"application/json"
+        },
+        encoding: Encoding.getByName('utf-8'));
+
+
+    // var response = await request.send();
+
+
+    print(json.decode(request.body));
+
+    return json.decode(request.body);
+  }
 
   Future<String> addDoctor(doctor doctorData) async {
 

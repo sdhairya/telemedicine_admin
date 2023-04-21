@@ -14,7 +14,7 @@ class dashboardScreen extends StatefulWidget {
 class _dashboardScreenState extends State<dashboardScreen> {
   @override
   Widget build(BuildContext context) {
-    return body(id: widget.id);
+    // return body(id: widget.id);
     return FutureBuilder(
       future: api().profiledetails(widget.id),
       builder: (context, snapshot) {
