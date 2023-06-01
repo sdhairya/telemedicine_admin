@@ -157,21 +157,6 @@ class _bodyState extends State<body> {
             ),
           ),
         ),
-        floatingActionButton: Container(
-          // margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.2),
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-                  backgroundColor: colors().logo_darkBlue
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: components().text("Book Appointment", FontWeight.w600, Colors.white, 18)
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       ),
     );

@@ -8,7 +8,7 @@ import 'package:telemedicine_admin/dataClass/dataClass.dart';
 import 'dataClass/dataClass.dart';
 
 class api {
-  String uri = 'http://192.168.1.58:5024/';
+  String uri = 'http://192.168.1.15:5024/';
 
   Future<List<String>> login(String phone, String password) async {
     String url = uri + "api/users/login";
